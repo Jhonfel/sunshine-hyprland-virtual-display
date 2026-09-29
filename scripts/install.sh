@@ -50,6 +50,10 @@ if [ ! -f ~/.config/sunshine/sunshine.conf ]; then
     sed "s|~/.local/bin/|$HOME/.local/bin/|g" .config/sunshine/sunshine.conf > ~/.config/sunshine/sunshine.conf
 else
     warn "~/.config/sunshine/sunshine.conf already exists — review it manually against the example in .config/sunshine/sunshine.conf"
+    if grep -q '^global_prep_cmd.*~/' ~/.config/sunshine/sunshine.conf; then
+        warn "Its global_prep_cmd uses \"~\", which Sunshine does not expand. Replace it with absolute paths:"
+        warn "  global_prep_cmd = [{\"do\":\"$HOME/.local/bin/sunshine-connect.sh\",\"undo\":\"$HOME/.local/bin/sunshine-disconnect.sh\",\"elevated\":false}]"
+    fi
 fi
 
 # Optional overrides for the scripts (physical monitor, resolution matching, systemd unit...)
